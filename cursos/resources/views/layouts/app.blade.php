@@ -38,6 +38,8 @@
           <!-- Navbar Actions-->
           <div class="d-flex align-items-center">
 
+         
+
              <!-- Notifications-->
             <a class="btn-icon btn-hover-dark position-relative p-2 disable-child-pointer" data-bs-toggle="offcanvas" href="#offcanvasNotifications" role="button"
             aria-controls="offcanvasNotifications">
@@ -101,6 +103,13 @@
 
                                     <li class="menu-item"><a class="d-flex align-items-center menu-link" href='users'><i
                                     class="ri-home-4-line me-3"></i> <span>Usuarios</span></a></li>
+
+                                    <li class="menu-item">
+    <a class="d-flex align-items-center menu-link" href="{{ route('generar_ordenes.index') }}"><i class="ri-home-4-line me-3"></i><span>Generar Ordenes</span></a>
+</li>
+
+
+                                    
 
                     </ul>
                 </div>

@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CursosController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\GenerarOrdenesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('users',UsersController::class);
 
+    Route::get('/genera_ordenes', [GenerarOrdenesController::class,'index'])->name('generar_ordenes.index');
 
+    Route::post('/GenerarOrdenes',[GenerarOrdenesController::class,'generarOrdenes'])->name('GeneraOrdenes');
 
 
 });

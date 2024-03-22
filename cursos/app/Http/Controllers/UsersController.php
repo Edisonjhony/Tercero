@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Roles;
 use DB;
+
 class UsersController extends Controller
 {
     /**
@@ -13,24 +14,12 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
-    // $users=User::all() ;
-    // $users=DB::select("SELECT*FROM users u JOIN roles r ON u.rol_id=r.rol_id"); 
-   
- 
-    //  ->with('users',$users)
-    //  ;
+        $users = User::join('roles as r', 'users.rol_id', '=', 'r.rol_id')
+            ->select('users.*')
+            ->get();
 
-$users= DB::table('users as u')
-->join('roles as r', 'u.rol_id','=','r.rol_id')
-->select('*')
-->get();
-
-return view('users.index')
-->with('users',$users);
-
-
-
+        return view('users.index')
+            ->with('users', $users);
     }
 
     /**
@@ -38,21 +27,20 @@ return view('users.index')
      */
     public function create()
     {
-        //
-        $roles=Roles::all();
-
-        return view('users.create')
-        ->with('roles',$roles)
-  ;  }
+        $roles = Roles::all();
+        return view('users.create')->with('roles', $roles);
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-        $input=$request->all();
-        User::create($input);
+        $validatedData = $request->validate([
+            // Aquí coloca las reglas de validación para los campos de entrada
+        ]);
+
+        User::create($validatedData);
         return redirect(route('users.index'));
     }
 
@@ -67,15 +55,17 @@ return view('users.index')
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $usu_id )
+    public function edit(string $usu_id)
     {
-        //
-        $user=User::find($usu_id);
-        $roles=Roles::all();
-          return view('users.edit')
-          ->with('user',$user)
-          ->with('roles',$roles);
+        $user = User::find($usu_id);
+        if (!$user) {
+            abort(404);
+        }
 
+        $roles = Roles::all();
+        return view('users.edit')
+            ->with('user', $user)
+            ->with('roles', $roles);
     }
 
     /**
@@ -83,10 +73,16 @@ return view('users.index')
      */
     public function update(Request $request, string $usu_id)
     {
-        //
-        $input=$request->all();
-        $user=User::find($usu_id);
-        $user->update($input);
+        $validatedData = $request->validate([
+            // Aquí coloca las reglas de validación para los campos de entrada
+        ]);
+
+        $user = User::find($usu_id);
+        if (!$user) {
+            abort(404);
+        }
+
+        $user->update($validatedData);
         return redirect(route('users.index'));
     }
 
@@ -95,10 +91,16 @@ return view('users.index')
      */
     public function destroy(string $usu_id)
     {
-        //
-        $users=User::find($usu_id);
-       $users->delete();
-       return redirect(route('users.index') );
+        $user = User::find($usu_id);
+        if (!$user) {
+            abort(404);
+        }
 
+        $user->delete();
+        return redirect(route('users.index'));
     }
+
+
+
+    
 }
